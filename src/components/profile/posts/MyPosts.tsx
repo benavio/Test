@@ -1,14 +1,31 @@
 import React from "react";
 import classes from "./MyPosts.module.css";
 import {Post} from "./post/Post";
+import {postsDataType} from "../../../redux/state";
 
-export const MyPosts = () => {
-    let postsData = [
-        {id: 1, message: "hi", likesCounter: 12},
-        {id: 2, message: "Yo", likesCounter: 1}
-    ]
+// export type PropsType = {
+//     message: string,
+//     likesCounter: number,
+// }
 
-    let postsElements = postsData.map( p => <Post message={p.message} likeCounter={p.likesCounter} /> )
+export type PropsType = {
+    postsData: Array<postsDataType>
+    addPost: (message: string) => void
+}
+
+
+export const MyPosts = (props: PropsType) => {
+
+    let postsElements = props.postsData.map((p) => <Post message={p.message} likeCounter={p.likesCounter}/>
+    )
+
+    let addPost = () => {
+        if (newPostElement.current) {
+            props.addPost(newPostElement.current.value);
+        }
+    }
+
+    let newPostElement = React.createRef<HTMLTextAreaElement>()
 
     return (
         <div className={classes.profile}>
@@ -18,18 +35,16 @@ export const MyPosts = () => {
                 </div>
                 <div>
                     <div>
-                        <textarea></textarea>
+                        <textarea ref={newPostElement}></textarea>
                     </div>
                     <div>
-                        <button>Add post</button>
-                        <button>Remove</button>
+                        <button onClick={addPost}>Add post</button>
                     </div>
 
                 </div>
             </div>
-            <div>
-                {postsElements}
-            </div>
+
+            {postsElements}
         </div>
     );
 }
